@@ -2,6 +2,7 @@ from strands import Agent
 from strands.models.ollama import OllamaModel
 
 from backend.app.tools.logs import search_logs
+from backend.app.tools.deployments import get_deployment_history
 
 
 model = OllamaModel(
@@ -11,7 +12,7 @@ model = OllamaModel(
 
 agent = Agent(
     model=model,
-    tools=[search_logs],
+    tools=[search_logs, get_deployment_history],
 )
 
 response = agent(
@@ -22,8 +23,19 @@ response = agent(
     Service: product-service
     Observed error: KeyError: price
 
-    You have access to a production log search tool.
-    Investigate the incident using the available evidence.
+    You have access to production investigation tools.
+
+    Investigate the incident using the available tools.
+
+    Do not assume the first piece of evidence is the root cause.
+    Gather additional evidence when another available tool could help validate or narrow the hypothesis.
+
+    Clearly distinguish:
+    - observed evidence
+    - your inference
+    - unresolved hypotheses
+
+    Only conclude a root cause when the available evidence supports it.
     Explain what you find.
     """
 )
