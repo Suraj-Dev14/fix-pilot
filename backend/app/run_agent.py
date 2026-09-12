@@ -3,6 +3,7 @@ from strands.models.ollama import OllamaModel
 
 from backend.app.tools.logs import search_logs
 from backend.app.tools.deployments import get_deployment_history
+from backend.app.tools.api import inspect_api_response
 
 
 model = OllamaModel(
@@ -12,7 +13,11 @@ model = OllamaModel(
 
 agent = Agent(
     model=model,
-    tools=[search_logs, get_deployment_history],
+    tools=[
+        search_logs,
+        get_deployment_history,
+        inspect_api_response,
+      ],
 )
 
 response = agent(
