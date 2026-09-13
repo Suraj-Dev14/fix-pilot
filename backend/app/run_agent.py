@@ -6,6 +6,7 @@ from backend.app.tools.deployments import get_deployment_history
 from backend.app.tools.api import inspect_api_response
 from backend.app.tools.versions import compare_versions
 from backend.app.tools.regression import run_regression_test
+from backend.app.tools.rollback import rollback_deployment
 
 from backend.app.models import InvestigationReport
 
@@ -23,6 +24,7 @@ agent = Agent(
         inspect_api_response,
         compare_versions,
         run_regression_test,
+        rollback_deployment,
       ],
       structured_output_model=InvestigationReport,
 )
@@ -57,11 +59,22 @@ response = agent(
 
     A code diff can explain why an error is possible, but a regression test should be used when available to verify that the suspected failure actually occurs.
 
+    You may propose a rollback if the evidence indicates it could mitigate the incident.
+
+    However, rollback is a production-changing action.
+    Never assume approval.
+    If you call the rollback tool, do not provide approval unless it is explicitly supplied by the human.
+
     Only claim that a hypothesis is validated when the available evidence supports it.
 
     Explain your final findings.
     """
 )
 
-print(type(response))
+print("TYPE:", type(response))
+print("STOP REASON:", response.stop_reason)
+print("STRUCTURED OUTPUT:")
 print(response.structured_output)
+
+print("RAW MESSAGE:")
+print(response.message)
