@@ -1,5 +1,9 @@
 from strands import tool
-from backend.app.safety import ActionRisk, ProposedAction
+from backend.app.safety import (
+    ActionRisk,
+    ProposedAction,
+    execute_action,
+)
 
 @tool
 def rollback_deployment(
@@ -13,18 +17,19 @@ def rollback_deployment(
         name="rollback_deployment",
         description=f"Rollback {service} to {target_version}",
         risk=ActionRisk.REQUIRES_APPROVAL,
+        approved=approved,
     )
 
-    if not approved:
+    result = execute_action(action)
+
+    if not result["executed"]:
         return {
-            "executed": False,
+            **result,
             "requires_approval": True,
-            "action": action.model_dump(),
         }
 
     return {
-        "executed": True,
+        **result,
         "requires_approval": True,
-        "action": action.model_dump(),
         "message": f"Successfully rolled back {service} to {target_version}.",
     }

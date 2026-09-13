@@ -2,6 +2,8 @@ from backend.app.safety import (
     ActionRisk,
     ProposedAction,
     requires_approval,
+    approve_action,
+    execute_action,
 )
 from backend.app.tools.rollback import rollback_deployment
 
@@ -41,3 +43,34 @@ result = rollback_deployment(
 )
 
 print(result)
+
+print("\nTesting approval flow:")
+
+action = ProposedAction(
+    name="rollback_deployment",
+    description="Rollback product-service to v1.1.0",
+    risk=ActionRisk.REQUIRES_APPROVAL,
+)
+
+print("Before approval:", action)
+
+approved_action = approve_action(action)
+
+print("After approval:", approved_action)
+
+print("\nTesting execution gate:")
+
+blocked_action = ProposedAction(
+    name="rollback_deployment",
+    description="Rollback product-service to v1.1.0",
+    risk=ActionRisk.REQUIRES_APPROVAL,
+)
+
+print("Unapproved execution:")
+print(execute_action(blocked_action))
+
+
+approved_action = approve_action(blocked_action)
+
+print("\nApproved execution:")
+print(execute_action(approved_action))
