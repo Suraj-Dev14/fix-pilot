@@ -1,2 +1,4 @@
 strands-agents
 ollama
+fastapi
+uvicorn
