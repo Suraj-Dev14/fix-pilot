@@ -1,13 +1,21 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from backend.app.agent import agent
-import time
 
 
 app = FastAPI(
     title="FixPilot API",
     description="Autonomous production incident investigation API",
     version="0.1.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -24,7 +32,6 @@ def health_check():
 
 @app.post("/investigate")
 def investigate_incident(incident: IncidentRequest):
-    start_time  = time.perf_counter()
     response = agent(
         f"""
         Investigate this production incident.
@@ -53,13 +60,5 @@ Clearly distinguish:
 Do not execute production-changing actions without explicit human approval.
         """
     )
-    elapsed = time.perf_counter() - start_time
-
-    print(f"Agent execution time: {elapsed:.2f} seconds")
-
-    print(f"Agent execution time: {elapsed:.2f} seconds")
-
-    print("AGENT METRICS:")
-    print(response.metrics)
 
     return response.structured_output.model_dump()
