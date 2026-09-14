@@ -53,6 +53,8 @@ The agent decides which available tools to use rather than following a hardcoded
 
 ## Architecture
 
+![FixPilot Architecture](docs/architecture.png)
+
 ```text
 ┌──────────────────────┐
 │      React UI        │
