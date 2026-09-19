@@ -1,0 +1,17 @@
+project:
+  name: fixpilot-demo
+
+service:
+  name: product-service
+
+environment: production
+
+integrations:
+  logs: demo
+  source_control: demo
+  deployments: demo
+  api: demo
+  regression: demo
+
+incident:
+  default_severity: medium
