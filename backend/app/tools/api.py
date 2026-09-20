@@ -1,16 +1,12 @@
 from strands import tool
 
-from backend.app.data.api_responses import API_RESPONSES
+from backend.providers.demo_api import DemoApiProvider
+
+api_provider = DemoApiProvider()
 
 
 @tool
 def inspect_api_response(service: str) -> dict:
     """Inspect the latest API response for a service."""
 
-    return API_RESPONSES.get(
-        service,
-        {
-            "status_code": 404,
-            "body": {},
-        },
-    )
+    return api_provider.inspect_response(service)

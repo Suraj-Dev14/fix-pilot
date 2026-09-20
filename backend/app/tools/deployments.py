@@ -1,14 +1,12 @@
 from strands import tool
 
-from backend.app.data.deployments import DEPLOYMENTS
+from backend.providers.demo_deployments import DemoDeploymentProvider
+
+deployment_provider = DemoDeploymentProvider()
 
 
 @tool
 def get_deployment_history(service: str) -> list[dict]:
     """Return deployment history for a service."""
 
-    return [
-        deployment
-        for deployment in DEPLOYMENTS
-        if deployment["service"] == service
-    ]
+    return deployment_provider.get_history(service)
