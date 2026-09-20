@@ -1,8 +1,10 @@
 from strands import tool
 
-from backend.providers.demo_source import DemoSourceProvider
+from backend.providers.factory import registry
 
-source_provider = DemoSourceProvider()
+
+source_provider = registry.get_source_provider()
+
 
 @tool
 def compare_versions(
@@ -12,12 +14,17 @@ def compare_versions(
 ) -> dict:
     """Compare the code for two versions of a service."""
 
-    result = source_provider.compare_versions(old_version, new_version)
+    result = source_provider.compare_versions(
+        old_version=old_version,
+        new_version=new_version,
+    )
 
     if "error" in result:
         return result
 
     if result["service"] != service:
-        return {"error": "Version does not belong to the requested service."}
+        return {
+            "error": "Version does not belong to the requested service."
+        }
 
     return result
