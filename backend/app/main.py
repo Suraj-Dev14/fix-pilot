@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+
 from backend.app.agent import agent
+from backend.app.models import Incident
+from backend.app.investigation import (build_investigation_prompt, create_investigation_context)
 
 
 app = FastAPI(
@@ -19,46 +21,16 @@ app.add_middleware(
 )
 
 
-class IncidentRequest(BaseModel):
-    incident_id: str
-    service: str
-    observed_error: str
-
-
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
 
 
 @app.post("/investigate")
-def investigate_incident(incident: IncidentRequest):
+def investigate_incident(incident: Incident):
+    context = create_investigation_context(incident)
     response = agent(
-        f"""
-        Investigate this production incident.
-
-        Incident ID: {incident.incident_id}
-        Service: {incident.service}
-        Observed error: {incident.observed_error}
-
-        Gather evidence using the available investigation tools.
-
-Before concluding the root cause, run the available regression
-test when it can validate the suspected failure.
-
-Keep intermediate reasoning concise.
-Do not explain your reasoning before using a tool.
-Use tools directly when evidence is needed.
-Only provide the detailed explanation in the final structured report.
-
-Clearly distinguish:
-- observed evidence
-- inferences
-- unresolved hypotheses
-- validated root cause
-- recommendations
-
-Do not execute production-changing actions without explicit human approval.
-        """
+        build_investigation_prompt(context.incident),
     )
 
     return response.structured_output.model_dump()
