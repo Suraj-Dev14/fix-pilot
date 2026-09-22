@@ -12,9 +12,13 @@ class ProjectConfig(BaseModel):
 class ServiceConfig(BaseModel):
   name: str = Field(min_length=1)
 
+class SourceControlConfig(BaseModel):
+  provider: str = Field(min_length=1)
+  repository_path: str = Field(min_length=1)
+
 class IntegrationsConfig(BaseModel):
   logs: str = Field(min_length=1)
-  source_control: str = Field(min_length=1)
+  source_control: SourceControlConfig
   deployments: str = Field(min_length=1)
   api: str = Field(min_length=1)
   regression: str = Field(min_length=1)

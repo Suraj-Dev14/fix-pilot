@@ -5,6 +5,16 @@ from .source import SourceProvider
 class DemoSourceProvider(SourceProvider):
   """"Source provider backed by simulated FixPilot version data."""
 
+  def get_recent_commits(self, limit: int = 10) -> list[dict]:
+    """Return recent simulated versions."""
+    return [
+        {
+            "version": version,
+            "service": data["service"],
+        }
+        for version, data in list(VERSIONS.items())[:limit]
+    ]
+
   def compare_versions(
       self,
       old_version: str,
@@ -24,9 +34,13 @@ class DemoSourceProvider(SourceProvider):
       }
 
     return {
-      "service": old["service"],
       "old_version": old_version,
       "new_version": new_version,
-      "old_code": old["code"],
-      "new_code": new["code"],
+      "changed_files": [],
+      "diff": (
+        f"--- {old_version}\n"
+        f"{old['code']}\n"
+        f"+++ {new_version}\n"
+        f"{new['code']}"
+      ),
     }

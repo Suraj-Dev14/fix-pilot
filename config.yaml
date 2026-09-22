@@ -8,7 +8,11 @@ environment: production
 
 integrations:
   logs: demo
-  source_control: demo
+
+  source_control:
+    provider: local_git
+    repository_path: .
+
   deployments: demo
   api: demo
   regression: demo

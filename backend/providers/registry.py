@@ -37,12 +37,20 @@ class ProviderRegistry:
         )
 
     def get_source_provider(self) -> SourceProvider:
-        provider_name = self.config.integrations.source_control
+        source_config = self.config.integrations.source_control
+        provider_name = source_config.provider
 
         if provider_name == "demo":
             from .demo_source import DemoSourceProvider
 
             return DemoSourceProvider()
+
+        if provider_name == "local_git":
+            from .local_git import LocalGitProvider
+
+            return LocalGitProvider(
+                repository_path=source_config.repository_path,
+            )
 
         raise ValueError(
             f"Unsupported source provider: {provider_name}"

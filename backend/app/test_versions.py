@@ -2,9 +2,8 @@ from backend.app.tools.versions import compare_versions
 
 
 result = compare_versions(
-    service="product-service",
-    old_version="v1.1.0",
-    new_version="v1.2.0",
+    old_version="43cc9a6",
+    new_version="d6eb0e9",
 )
 
 print(result)
