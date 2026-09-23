@@ -14,7 +14,8 @@ class ServiceConfig(BaseModel):
 
 class SourceControlConfig(BaseModel):
   provider: str = Field(min_length=1)
-  repository_path: str = Field(min_length=1)
+  repository_path: str | None = None
+  repository: str | None = None
 
 class RegressionConfig(BaseModel):
   provider: str = Field(min_length=1)

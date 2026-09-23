@@ -52,6 +52,18 @@ class ProviderRegistry:
                 repository_path=source_config.repository_path,
             )
 
+        if provider_name == "github":
+            from .github import GitHubProvider
+
+            if not source_config.repository:
+                raise ValueError(
+            "GitHub source provider requires a repository."
+            )
+
+            return GitHubProvider(
+                repository=source_config.repository
+            )
+
         raise ValueError(
             f"Unsupported source provider: {provider_name}"
         )

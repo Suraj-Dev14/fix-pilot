@@ -10,8 +10,8 @@ integrations:
   logs: demo
 
   source_control:
-    provider: local_git
-    repository_path: .
+    provider: github
+    repository: Suraj-Dev14/fix-pilot
 
   deployments: demo
   api: demo
