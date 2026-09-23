@@ -15,7 +15,10 @@ integrations:
 
   deployments: demo
   api: demo
-  regression: demo
+
+  regression:
+    provider: local
+    command: python -m pytest
 
 incident:
   default_severity: medium

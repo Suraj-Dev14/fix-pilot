@@ -16,12 +16,16 @@ class SourceControlConfig(BaseModel):
   provider: str = Field(min_length=1)
   repository_path: str = Field(min_length=1)
 
+class RegressionConfig(BaseModel):
+  provider: str = Field(min_length=1)
+  command: str = Field(min_length=1)
+
 class IntegrationsConfig(BaseModel):
   logs: str = Field(min_length=1)
   source_control: SourceControlConfig
   deployments: str = Field(min_length=1)
   api: str = Field(min_length=1)
-  regression: str = Field(min_length=1)
+  regression: RegressionConfig
 
 class IncidentConfig(BaseModel):
   default_severity: str = Field(min_length=1)

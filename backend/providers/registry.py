@@ -69,12 +69,15 @@ class ProviderRegistry:
         )
 
     def get_regression_provider(self) -> RegressionProvider:
-        provider_name = self.config.integrations.regression
+        regression_config = self.config.integrations.regression
+        provider_name = regression_config.provider
 
-        if provider_name == "demo":
-            from .demo_regression import DemoRegressionProvider
+        if provider_name == "local":
+            from .local_regression import LocalRegressionProvider
 
-            return DemoRegressionProvider()
+            return LocalRegressionProvider(
+                command=regression_config.command,
+            )
 
         raise ValueError(
             f"Unsupported regression provider: {provider_name}"
