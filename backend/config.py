@@ -21,8 +21,12 @@ class RegressionConfig(BaseModel):
   provider: str = Field(min_length=1)
   command: str = Field(min_length=1)
 
+class LogConfig(BaseModel):
+  provider: str = Field(min_length=1)
+  log_group: str | None = None
+
 class IntegrationsConfig(BaseModel):
-  logs: str = Field(min_length=1)
+  logs: LogConfig
   source_control: SourceControlConfig
   deployments: str = Field(min_length=1)
   api: str = Field(min_length=1)

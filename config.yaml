@@ -7,7 +7,9 @@ service:
 environment: production
 
 integrations:
-  logs: demo
+  logs: 
+    provider: cloudwatch
+    log_group: "Fix-Pilot"
 
   source_control:
     provider: github

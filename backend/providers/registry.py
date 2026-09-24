@@ -13,12 +13,25 @@ class ProviderRegistry:
         self.config = config
 
     def get_log_provider(self) -> LogProvider:
-        provider_name = self.config.integrations.logs
+        logs_config = self.config.integrations.logs
+        provider_name = logs_config.provider
 
         if provider_name == "demo":
             from .demo_logs import DemoLogProvider
 
             return DemoLogProvider()
+
+        if provider_name == "cloudwatch":
+            from .cloudwatch_logs import CloudWatchLogProvider
+
+            if not logs_config.log_group:
+                raise ValueError(
+                    "CloudWatch log provider requires a log_group."
+                )
+
+            return CloudWatchLogProvider(
+                log_group=logs_config.log_group
+            )
 
         raise ValueError(
             f"Unsupported log provider: {provider_name}"
