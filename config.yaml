@@ -15,7 +15,9 @@ integrations:
     provider: github
     repository: Suraj-Dev14/fix-pilot
 
-  deployments: demo
+  deployments:
+    provider: github
+
   api: demo
 
   regression:

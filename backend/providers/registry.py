@@ -38,12 +38,28 @@ class ProviderRegistry:
         )
 
     def get_deployment_provider(self) -> DeploymentProvider:
-        provider_name = self.config.integrations.deployments
+        deployments_config = self.config.integrations.deployments
+
+        provider_name = deployments_config.provider
 
         if provider_name == "demo":
             from .demo_deployments import DemoDeploymentProvider
 
             return DemoDeploymentProvider()
+
+        if provider_name == "github":
+            from .github_deployments import GitHubDeploymentProvider
+
+            source_config = self.config.integrations.source_control
+
+            if not source_config.repository:
+                raise ValueError(
+                    "GitHub deployment provider requires a repository."
+                )
+
+            return GitHubDeploymentProvider(
+                repository=source_config.repository
+            )
 
         raise ValueError(
             f"Unsupported deployment provider: {provider_name}"
